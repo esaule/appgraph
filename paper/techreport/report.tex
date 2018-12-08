@@ -43,6 +43,11 @@ here.)
 
 \includegraphics[width=.5\linewidth]{../../notes/20180608_120848.jpg}
 
+Actually in Karatsuba, the critical path is mostly composed of add
+tasks. Add tasks can be trivially be made parallel by keeping their
+work constant but decreasing the critical path up to $add(1)$. This
+makes Karatsuba the algorithm with lowest work and small critical path.
+
 \subsection{Hybridization}
 
 \begin{theorem}
