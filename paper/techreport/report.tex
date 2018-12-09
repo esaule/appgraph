@@ -95,7 +95,7 @@ bounds.
 
 One can generalize that cut by having $P$ cuts, and performing P
 binary searches on each side, there is a need to reconcile the cuts
-position which cost a merge of size $2P$. This leads to $Merge^W(n,P) =
+position which cost a merge of size $2P$ (assumed sequential). This leads to $Merge^W(n,P) =
 n + 2 P \log n + 2P$, the $n$ term is for all the merges, the $2P \log
 n$ are for the binary search and the $2P$ is for the merge of size
 $2P$. And $Merge^{CP}(n,P) = n/P + \log n + 2P$, the $n/P$ term
@@ -154,6 +154,18 @@ $partition^{CP}(n)=n$. $QuickSort^W(n) = n \log n$ and
 $QuickSort^{CP}(n) = 2n$.
 
 \subsection{With Parallel Partition}
+
+Partition in parallel is done with a fixed split in $P$ parts. Each
+part takes a piece of the array and counts how many entries are less
+than, more than the pivot. Then a prefix sum is computed on the number
+of less than and more than entries than the pivot so that each piece
+knows where to write. Finally, each part is individually written. This
+makes
+
+$$partition^W(n, P) = 2 n + 2 PrefixSum^W(P)$$
+
+$$partition^{CP}(n, P) = 2 n/P + 2 PrefixSum^CP(P)$$
+
 
 
 
