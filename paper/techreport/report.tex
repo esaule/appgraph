@@ -131,6 +131,13 @@ parallel merge on the CP.
   & = & 2n/P + 4P + \log P \left ( \frac{n}{P}   +  \log n - \frac{\log P - 1}{2}  \right )
 \end{align}
 
+So we have an algorithm (Merge Sort) where part of the graph has
+limited parallelism and where adding parallelism can make sense. But
+adding too much parallelism is harmful because of the additional work
+to be done.
+
+Note that we can predict the shape of the gantt chart pretty easily.
+
 \section{QuickSort}
 
 
