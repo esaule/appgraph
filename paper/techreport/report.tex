@@ -16,6 +16,20 @@
 
 \maketitle
 
+\section{Introduction}
+
+The idea is to investigate the general problem of algorithm that have
+many versions, some being more parallel than other. At different
+stages of the algortihm one may opt to pick a different algorithm to
+match teh amount of parallelism available. Though increasing the
+parallelism may cost additional work, so doing that smartly is
+important. So there is a tradeoff in these problems between work and
+critical path. The overall problem in general is how to find these
+good configurations.
+
+We look here at some recursive problems where we can certainly derive
+the optimal configuration of the algorithm
+
 \section{Multiplying Large Integers}
 
 With $I_1 = aM + b$ and $I_2 = cM + d$ with $a,b,c,d < M$. Assume that
@@ -41,33 +55,12 @@ here.)
 
 \subsubsection{Karatsuba}
 
-\includegraphics[width=.5\linewidth]{../../notes/20180608_120848.jpg}
+%\includegraphics[width=.5\linewidth]{../../notes/20180608_120848.jpg}
 
 Actually in Karatsuba, the critical path is mostly composed of add
 tasks. Add tasks can be trivially be made parallel by keeping their
 work constant but decreasing the critical path up to $add(1)$. This
 makes Karatsuba the algorithm with lowest work and small critical path.
-
-\subsection{Hybridization}
-
-\begin{theorem}
-Karatsuba at high levels, naive then
-\end{theorem}
-
-\begin{proof}
-\end{proof}
-
-Analysis: \includegraphics[width=.5\linewidth]{../../notes/20180608_142908.jpg}
-
-\subsection{Generalization}
-
-\includegraphics[width=.5\linewidth]{../../notes/20180608_172003.jpg}
-
-\includegraphics[width=.5\linewidth]{../../notes/20180608_172007.jpg}
-
-\includegraphics[width=.5\linewidth]{../../notes/20180608_172400.jpg}
-
-\includegraphics[width=.5\linewidth]{../../notes/20180608_175854.jpg}
 
 \section{MergeSort}
 
@@ -165,6 +158,9 @@ makes
 $$partition^W(n, P) = 2 n + 2 PrefixSum^W(P)$$
 
 $$partition^{CP}(n, P) = 2 n/P + 2 PrefixSum^CP(P)$$
+
+The first partition on $n$ elements will be made with a parallelism of
+$P$ at level 0, the 2 partition of size $n/2$ at level 1 will be made with a parallelism of $P/2$ each, ...
 
 
 
