@@ -121,8 +121,15 @@ level $i$. So
   & = &n \log n + 2 P \log P \left (  \log n + 1 - \frac{\log P - 1}{2}   \right)  
 \end{align}
 
-and the critical path becomes
-
+In the critical path, there is a term in $2 n/P$ which comes from the
+low sequentil merges Merges and a $Merge^{CP}(n/2^i,P/2^i)$ for each
+parallel merge on the CP.
+\begin{align}
+  ParallelMergeSort^{CP}(n) & = & 2n/P + \sum_{i=0}^{\log P-1} Merge^{CP}(n/2^i,P/2^i) \\
+  & = & 2n/P + \sum_{i=0}^{\log P-1} \left ( (n/2^i)/(P/2^i) + \log (n/2^i) + 2P/2^i \right )\\
+  & = & 2n/P + \frac{n}{P} \log P  + \log P \log n - \frac{(\log P - 1)(\log P)}{2}  + 4P \\
+  & = & 2n/P + 4P + \log P \left ( \frac{n}{P}   +  \log n - \frac{\log P - 1}{2}  \right )
+\end{align}
 
 \section{QuickSort}
 
