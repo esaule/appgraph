@@ -19,9 +19,9 @@
 \section{Introduction}
 
 The idea is to investigate the general problem of algorithm that have
-many versions, some being more parallel than other. At different
-stages of the algortihm one may opt to pick a different algorithm to
-match teh amount of parallelism available. Though increasing the
+many versions, some being more parallel than other (ie some inducing more work but a shorter critical path). At different
+stages of the algoritm, one may opt to pick a different algorithm to
+match the amount of parallel resources available. Though increasing the
 parallelism may cost additional work, so doing that smartly is
 important. So there is a tradeoff in these problems between work and
 critical path. The overall problem in general is how to find these
@@ -32,8 +32,8 @@ the optimal configuration of the algorithm
 
 \section{Multiplying Large Integers}
 
-With $I_1 = aM + b$ and $I_2 = cM + d$ with $a,b,c,d < M$. Assume that
-$I_1, I-2$ are of similar length which is $2^k$ words. $M$ is the
+With $I_1 = aM + b$ and $I_2 = cM + d$ with $a,b,c,d < M$. We assume that
+$I_1, I-2$ are of similar length which is $2^k$ words and $M$ is the
 basis that maps to $2^{k-1}$ words.
 
 \subsection{Variants}
@@ -54,6 +54,12 @@ in two halves. (Note that there is a carry that bit that is ignored
 here.)
 
 \subsubsection{Karatsuba}
+
+\begin{align}
+  I_1  I_2 & = & a c M^2 + (a  c + b  d -(a-b)(c-d) ) M + bd \\
+            & = & (a c)_{u} M^3 + ((a c)_{l} - ((a-b)(c-d))_{u} + (a  c)_u + (b  d)_u) M^2 + ((b d)_{u} - ((a-b)(c-d))_{l} + (a  c)_l + (b  d)_l ) M + (b d)_{l}
+\end{align}
+
 
 %\includegraphics[width=.5\linewidth]{../../notes/20180608_120848.jpg}
 
