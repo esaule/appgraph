@@ -73,15 +73,15 @@ Analysis: \includegraphics[width=.5\linewidth]{../../notes/20180608_142908.jpg}
 
 \subsection{Variants}
 
-\subsubsection{Sequential Merge}
+\subsubsection{With Sequential Merge}
 
 With sequential merge, we have an in-tree of merges with the root
-being of $Merge(n)$, one level down being 2 $Merge(n)$, etc.
+being of $Merge(n)$, one level down being 2 $Merge(n/2)$, etc.
 
 This leads to $Merge^W(n) = n$ and $Merge^{CP}(n)=n$. $MergeSort^W(n)
 = n \log n$ and $MergeSort^{CP}(n) = 2n$.
 
-\subsubsection{Parallel Merge}
+\subsubsection{With Parallel Merge}
 
 Merge can be made parallel. When merging two arrays of size $n/2$. Cut
 the first one in half and find the corresponding cut location in the
@@ -139,6 +139,21 @@ to be done.
 Note that we can predict the shape of the gantt chart pretty easily.
 
 \section{QuickSort}
+
+Note in QS that we can assume that partition always splits in the
+middle, since it is probabilistically equivalent to that.
+
+\subsection{With Sequential Partition}
+
+With sequential partition, we have an out-tree of partition with the
+root being of $partition(n)$, one level down being 2 $partition(n/2)$,
+etc.
+
+This leads to $partition^W(n) = n$ and
+$partition^{CP}(n)=n$. $QuickSort^W(n) = n \log n$ and
+$QuickSort^{CP}(n) = 2n$.
+
+\subsection{With Parallel Partition}
 
 
 
