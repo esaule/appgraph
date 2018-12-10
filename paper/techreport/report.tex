@@ -19,22 +19,23 @@
 \section{Introduction}
 
 The idea is to investigate the general problem of algorithm that have
-many versions, some being more parallel than other (ie some inducing more work but a shorter critical path). At different
-stages of the algoritm, one may opt to pick a different algorithm to
-match the amount of parallel resources available. Though increasing the
+many versions, some being more parallel than other (ie some inducing
+more work but a shorter critical path). At different stages of the
+algoritm, one may opt to pick a different algorithm to match the
+amount of parallel resources available. However, increasing the
 parallelism may cost additional work, so doing that smartly is
 important. So there is a tradeoff in these problems between work and
 critical path. The overall problem in general is how to find these
 good configurations.
 
 We look here at some recursive problems where we can certainly derive
-the optimal configuration of the algorithm
+the optimal configuration of the algorithm.
 
 \section{Multiplying Large Integers}
 
-With $I_1 = aM + b$ and $I_2 = cM + d$ with $a,b,c,d < M$. We assume that
-$I_1, I-2$ are of similar length which is $2^k$ words and $M$ is the
-basis that maps to $2^{k-1}$ words.
+Compute $I_1 \times I_2$ with $I_1 = aM + b$ and $I_2 = cM + d$ and
+$a,b,c,d < M$. We assume that $I_1, I_2$ are of similar length which
+is $2^k$ digits and $M$ is the basis that maps to $2^{k-1}$ digits.
 
 \subsection{Variants}
 
@@ -43,30 +44,33 @@ basis that maps to $2^{k-1}$ words.
 The naive algorithm taught in elementary school is to compute:
 
 \begin{align}
-  I_1 * I_2 & = & a*c M^2 + (a * d + b * c ) M + b*d \\
-            & = & (a*c)_{u} M^3 + ((a*c)_{l} + (a * d + b * c )_{u}) M^2 + ( (a * d + b * c )_{l} + (b*d)_{u} ) M + (b*d)_{l}
+  I_1 \times I_2 & = (a\times c) M^2 + (a \times d + b \times c ) M + b\times d \\
+            & = (a\times c)_{u} M^3 + ((a\times c)_{l} + (a \times d + b \times c )_{u}) M^2 + ( (a \times d + b \times c )_{l} + (b\times d)_{u} ) M + (b\times d)_{l}
 \end{align}
 
-where the $x_u$ stands for the MSBs of $x$ and $x_l$ stand for the
-LSBs of $x$. Indeed when multiplying $a*c$ (for instance), the result
-can be almost as large as $M^2$ and therefore can are typically split
-in two halves. (Note that there is a carry that bit that is ignored
-here.)
+where the $x_u$ stands for the MSDs\footnote{Most Significant Digits}
+of $x$ and $x_l$ stand for the LSBs of $x$. Indeed when multiplying
+$a\times c$ (for instance), the result can be almost as large as $M^2$
+and therefore is typically split in two halves (Note that there is a
+carry bit that is ignored here.)
 
 \subsubsection{Karatsuba}
 
 \begin{align}
-  I_1  I_2 & = & a c M^2 + (a  c + b  d -(a-b)(c-d) ) M + bd \\
-            & = & (a c)_{u} M^3 + ((a c)_{l} - ((a-b)(c-d))_{u} + (a  c)_u + (b  d)_u) M^2 + ((b d)_{u} - ((a-b)(c-d))_{l} + (a  c)_l + (b  d)_l ) M + (b d)_{l}
+  I_1  I_2 & = a c M^2 + (a  c + b  d -(a-b)(c-d) ) M + bd \\
+            & = \begin{aligned}[t]& (a c)_{u} M^3 + ((a c)_{l} - ((a-b)(c-d))_{u} + (a  c)_u + (b  d)_u) M^2\\ & + ((b d)_{u} - ((a-b)(c-d))_{l} + (a  c)_l + (b  d)_l ) M + (b d)_{l}
+  \end{aligned}
 \end{align}
 
 
 %\includegraphics[width=.5\linewidth]{../../notes/20180608_120848.jpg}
 
 Actually in Karatsuba, the critical path is mostly composed of add
-tasks. Add tasks can be trivially be made parallel by keeping their
-work constant but decreasing the critical path up to $add(1)$. This
-makes Karatsuba the algorithm with lowest work and small critical path.
+tasks. Add tasks can trivially be made parallel by keeping their work
+constant but decreasing the critical path up to
+$add(1)$\footnote{Lionel: how to deal with the carry bit ?}. This
+makes Karatsuba the algorithm with lowest work and smallest critical
+path.
 
 \section{MergeSort}
 
@@ -84,7 +88,7 @@ This leads to $Merge^W(n) = n$ and $Merge^{CP}(n)=n$. $MergeSort^W(n)
 
 Merge can be made parallel. When merging two arrays of size $n/2$. Cut
 the first one in half and find the corresponding cut location in the
-second array (using a binary search). To get good load balancem, one
+second array (using a binary search). To get good load balance, one
 needs to also cut the second array and find the corresponding location
 in the first array, leading to 3 chunks that need to be cut.
 
@@ -92,20 +96,21 @@ One can assume that a single cut is enough for analysis purposes,
 thought the more complex algorithm is necessary to reach the correct
 bounds.
 
-One can generalize that cut by having $P$ cuts, and performing P
-binary searches on each side, there is a need to reconcile the cuts
-position which cost a merge of size $2P$ (assumed sequential). This leads to $Merge^W(n,P) =
-n + 2 P \log n + 2P$, the $n$ term is for all the merges, the $2P \log
-n$ are for the binary search and the $2P$ is for the merge of size
-$2P$. And $Merge^{CP}(n,P) = n/P + \log n + 2P$, the $n/P$ term
-is for the final merge, the $\log n$ comes from the parallel binary
-searches, and the $2P$ comes from the merge of size $2P$ in parallel.
+One can generalize that cut by having $P$ cuts, and performing $P$
+binary searches on each side. There is a need to reconcile the cuts
+positions which costs a merge of size $2P$ (assumed sequential). This
+leads to $Merge^W(n,P) = n + 2 P \log n + 2P$, the $n$ term is for all
+the merges, the $2P \log n$ are for the binary search and the $2P$ is
+for the merge of size $2P$. And $Merge^{CP}(n,P) = n/P + \log n + 2P$,
+the $n/P$ term is for the final merge, the $\log n$ comes from the
+parallel binary searches, and the $2P$ comes from the merge of size
+$2P$ in parallel.
 
-Since obtaining more parallelism is a costly operation in term of
+Since obtaining more parallelism is a costly operation in terms of
 work, for ParallelMergeSort, the optimal solution is clearly to have
 $P$ tasks for level 0, $P/2$ tasks for each merge at depth 1,
 $P/4$ tasks for each merge at depth 2, ... Defaulting to sequential
-merges at depth $\log P$
+merges at depth $\log P$.
 
 For this parallel merge sort, the work becomes
 $ParallelMergeSort^W(n) = n \log n + 2 P \sum_{i=0}^{\log P - 1} \log n/2^i + 1$
@@ -135,7 +140,7 @@ limited parallelism and where adding parallelism can make sense. But
 adding too much parallelism is harmful because of the additional work
 to be done.
 
-Note that we can predict the shape of the gantt chart pretty easily.
+Note that we can predict the shape of the Gantt chart pretty easily.
 
 \section{QuickSort}
 
